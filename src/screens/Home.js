@@ -227,6 +227,7 @@ function Home() {
       </TableContainer>
       <footer>
         <h4>Stay Safe, Stay Home, Get Vaccinated</h4>
+        <h5>Made with &#10084;&#65039; by<a href="https://github.com/Vishu54" style={{padding:"4px",textDecoration:"none"}}>Vishwesh</a></h5>
       </footer>
     </div>
   );
