@@ -19,11 +19,19 @@
   flex-wrap: wrap;
 }
 
+.confirmed {
+  border: 2px solid red;
+}
+.confirmed:hover {
+  background-color:crimson;
+  color: white;
+}
+
 .active {
   border: 2px solid red;
 }
 .active:hover {
-  background-color:crimson;
+  background-color:indianred;
   color: white;
 }
 
@@ -44,6 +52,7 @@
 }
 .vaccine {
   border: 2px solid blue;
+  font-size: x-small;
 }
 .vaccine:hover {
   background-color: rgb(62, 163, 226);
@@ -77,3 +86,4 @@
 footer{
   text-align: center;
 }
+

@@ -1,3 +1,4 @@
+import "./home.css";
 import {
   Grid,
   makeStyles,
@@ -9,8 +10,13 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
+
+// import LinearProgress from "@material-ui/core/LinearProgress";
+// import Typography from "@material-ui/core/Typography";
+// import Box from "@material-ui/core/Box";
+
+// import ProgressBar from "@ramonak/react-progress-bar";
 import React, { useEffect, useState } from "react";
-import "./home.css";
 import axios from "axios";
 const commaNumber = require("comma-number");
 
@@ -22,9 +28,9 @@ const useStyles = makeStyles({
   },
   tableData: {
     border: "2px solid #856084",
-    '&:hover': {
+    "&:hover": {
       background: "#C7CCDB",
-   },
+    },
   },
 });
 
@@ -70,6 +76,15 @@ function Home() {
   };
   const [rows, setrows] = useState([]);
   const [indiaData, setindiaData] = useState({});
+  const [activeCase, setactiveCase] = useState();
+  const [confirmedCase, setConfirmedCase] = useState();
+  const [deathCase, setDeathCase] = useState();
+  const [recoveredCase, setRecoveredCase] = useState();
+  const [population, setpopulation] = useState();
+  const [vaccinated1, setVaccinated1] = useState();
+  const [vaccinated2, setVaccinated2] = useState();
+  var vaccine1 = (vaccinated1 / population) * 100;
+  var vaccine2 = (vaccinated2 / population) * 100;
 
   async function getData() {
     var temp = [];
@@ -86,6 +101,16 @@ function Home() {
               });
             } else {
               setindiaData(data[key]);
+              setConfirmedCase(data[key].total.confirmed);
+              setDeathCase(data[key].total.deceased);
+              setRecoveredCase(data[key].total.recovered);
+              setactiveCase(
+                data[key].total.confirmed -
+                  (data[key].total.deceased + data[key].total.recovered)
+              );
+              setpopulation(data[key].meta.population);
+              setVaccinated1(data[key].total.vaccinated1);
+              setVaccinated2(data[key].total.vaccinated2);
             }
           }
         }
@@ -99,7 +124,7 @@ function Home() {
   useEffect(() => {
     getData();
   }, []);
-
+  console.log(rows)
   const classes = useStyles();
 
   return (
@@ -115,49 +140,123 @@ function Home() {
         <div>
           <Grid container spacing={1} className="dashboard">
             <Grid item>
-              <div className="active cases">
+              <div className="confirmed cases">
                 <h3>CONFIRMED</h3>
-                {indiaData.delta.confirmed ? (
+                {confirmedCase ? (
                   <p>&uarr; {commaNumber(indiaData.delta.confirmed)}</p>
                 ) : (
                   <p> </p>
                 )}
-                <h2>{commaNumber(indiaData.total.confirmed)}</h2>
+                <h2>{commaNumber(confirmedCase)}</h2>
+              </div>
+            </Grid>
+            <Grid item>
+              <div className="active cases">
+                <h3>ACTIVE</h3>
+                <h2>{commaNumber(activeCase)}</h2>
               </div>
             </Grid>
             <Grid item>
               <div className="cases recovered">
                 <h3>RECOVERED</h3>
-                {indiaData.delta.recovered ? (
+                {recoveredCase ? (
                   <p>&uarr; {commaNumber(indiaData.delta.recovered)}</p>
                 ) : (
                   <p> </p>
                 )}
-                <h2>{commaNumber(indiaData.total.recovered)}</h2>
+                <h2>{commaNumber(recoveredCase)}</h2>
               </div>
             </Grid>
             <Grid item>
               <div className="cases death">
                 <h3>DEATH</h3>
-                {indiaData.delta.deceased ? (
+                {deathCase ? (
                   <p>&uarr; {commaNumber(indiaData.delta.deceased)}</p>
                 ) : (
                   <p> </p>
                 )}
-                <h2>{commaNumber(indiaData.total.deceased)}</h2>
+                <h2>{commaNumber(deathCase)}</h2>
               </div>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <div className="cases vaccine">
                 <h3>VACCINATED</h3>
-                <h2>{commaNumber(indiaData.total.vaccinated)}</h2>
+                <h2>DOSE 1 {commaNumber(indiaData.total.vaccinated1)}</h2>
+                <h2>DOSE 2 {commaNumber(indiaData.total.vaccinated2)}</h2>
               </div>
-            </Grid>
+            </Grid> */}
           </Grid>
         </div>
       ) : (
         <h3>NO Data Found</h3>
       )}
+      <br />
+
+      {/* <div className="progress_bar">
+        <br />
+        <ProgressBar
+          completed={vaccine2.toPrecision(3)}
+          bgColor="rgb(62, 163, 226)"
+          width="80%"
+        />
+        <br />
+      </div>
+
+      <div style={{flexGrow:"1"}}>
+        <Grid container spacing={2}>
+          <Grid item xs={1}>
+            <Paper className={classes.paper}>Dose 1</Paper>
+          </Grid>
+          <Grid item xs={10}>
+            <Paper className={classes.paper}>
+              <ProgressBar
+                completed={vaccine1.toPrecision(3)}
+                bgColor="rgb(62, 163, 226)"
+                width="80%"
+              />
+            </Paper>
+          </Grid>
+          <Grid item xs={1}>
+            <Paper className={classes.paper}>xs</Paper>
+          </Grid>
+        </Grid>
+      </div> */}
+      {/* <div style={{flexGrow:"1"}}>
+        <Box display="flex" alignItems="center">
+          <Box width="100%" mr={1}>
+            <LinearProgress
+              variant="determinate"
+              color="primary"
+              value={vaccine1.toPrecision(3)}
+            />
+          </Box>
+          <Box minWidth={35}>
+            <Typography variant="body2" color="textSecondary">
+              {vaccine1.toPrecision(3)}
+            </Typography>
+          </Box>
+        </Box>
+      </div> */}
+
+      {/* <div style={{flexGrow:"1"}}>
+        <Box display="flex" alignItems="center">
+          <Box width="100%" mr={1}>
+            <LinearProgress
+              variant="determinate"
+              color="primary"
+              value={vaccine2.toPrecision(3)}
+            />
+          </Box>
+          <Box minWidth={35}>
+            <Typography variant="body2" color="textSecondary">
+              {vaccine2.toPrecision(3)}
+            </Typography>
+          </Box>
+        </Box>
+      </div> */}
+
+
+
 
       {/* data according to states */}
       <TableContainer component={Paper}>
@@ -169,6 +268,9 @@ function Home() {
               </TableCell>
               <TableCell align="center" className="table_head">
                 Confirmed
+              </TableCell>
+              <TableCell align="center" className="table_head">
+                Active
               </TableCell>
               <TableCell align="center" className="table_head">
                 Recovered
@@ -198,6 +300,9 @@ function Home() {
                   )}
                 </TableCell>
                 <TableCell align="center">
+                  {commaNumber(row.data.total.confirmed-(row.data.total.recovered+row.data.total.deceased))}
+                </TableCell>
+                <TableCell align="center">
                   {commaNumber(row.data.total.recovered)}
                   {row.data.delta && row.data.delta.recovered ? (
                     <span style={{ marginLeft: "10px", color: "green" }}>
@@ -218,7 +323,8 @@ function Home() {
                   )}
                 </TableCell>
                 <TableCell align="center">
-                  {commaNumber(row.data.total.vaccinated)}
+                  {commaNumber(row.data.total.vaccinated1)} |{" "}
+                  {commaNumber(row.data.total.vaccinated2)}
                 </TableCell>
               </TableRow>
             ))}
@@ -227,7 +333,15 @@ function Home() {
       </TableContainer>
       <footer>
         <h4>Stay Safe, Stay Home, Get Vaccinated</h4>
-        <h5>Made with &#10084;&#65039; by<a href="https://github.com/Vishu54" style={{padding:"4px",textDecoration:"none"}}>Vishwesh</a></h5>
+        <h5>
+          Made with &#10084;&#65039; by
+          <a
+            href="https://github.com/Vishu54"
+            style={{ padding: "4px", textDecoration: "none" }}
+          >
+            Vishwesh
+          </a>
+        </h5>
       </footer>
     </div>
   );
