@@ -80,11 +80,11 @@ function Home() {
   const [confirmedCase, setConfirmedCase] = useState();
   const [deathCase, setDeathCase] = useState();
   const [recoveredCase, setRecoveredCase] = useState();
-  const [population, setpopulation] = useState();
-  const [vaccinated1, setVaccinated1] = useState();
-  const [vaccinated2, setVaccinated2] = useState();
-  var vaccine1 = (vaccinated1 / population) * 100;
-  var vaccine2 = (vaccinated2 / population) * 100;
+  // const [population, setpopulation] = useState();
+  // const [vaccinated1, setVaccinated1] = useState();
+  // const [vaccinated2, setVaccinated2] = useState();
+  // var vaccine1 = (vaccinated1 / population) * 100;
+  // var vaccine2 = (vaccinated2 / population) * 100;
 
   async function getData() {
     var temp = [];
@@ -108,9 +108,9 @@ function Home() {
                 data[key].total.confirmed -
                   (data[key].total.deceased + data[key].total.recovered)
               );
-              setpopulation(data[key].meta.population);
-              setVaccinated1(data[key].total.vaccinated1);
-              setVaccinated2(data[key].total.vaccinated2);
+              // setpopulation(data[key].meta.population);
+              // setVaccinated1(data[key].total.vaccinated1);
+              // setVaccinated2(data[key].total.vaccinated2);
             }
           }
         }
